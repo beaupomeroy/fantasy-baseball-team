@@ -1,0 +1,49 @@
+.container {
+  padding: 20px;
+}
+
+.category {
+  margin-bottom: 40px;
+}
+
+.card {
+  background-color: #f9f9f9; /* Light background for visibility */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  width: 200px; /* Adjust width as needed */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.image {
+  width: 100%; /* Ensure image fits the card */
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  color: #333; /* Ensure text color contrasts with background */
+  font-weight: bold;
+}
+
+p {
+  font-size: 0.9rem;
+  margin: 5px 0;
+  color: #333; /* Dark text color for contrast */
+}
+
+.card * {
+  position: relative;
+  z-index: 1;
+}

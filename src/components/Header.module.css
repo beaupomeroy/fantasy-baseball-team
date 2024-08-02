@@ -1,0 +1,73 @@
+.header {
+    background-color: #333;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 50px;
+    box-sizing: border-box;
+    position: fixed; /* Fix the header to the top of the page */
+    top: 0; /* Ensure it stays at the top */
+  }
+  
+  .navList {
+    list-style: none;
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Align items vertically */
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .navItem {
+    margin-right: 20px; /* Adjust the margin between items */
+  }
+  
+  .navItem:last-child {
+    margin-right: 0; /* Remove margin from the last item */
+  }
+  
+  .navItem a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  
+  .navItem a:hover {
+    text-decoration: underline;
+  }
+  .authButtons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .button {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px; /* Space between buttons */
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #777;
+  }
+
+  .footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .footer p {
+    margin: 0;
+  }
