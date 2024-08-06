@@ -6,6 +6,7 @@ import Header from "./components/Header"; // Import the Header component
 import Footer from "./components/Footer"; // Import the Footer component
 import Player from "./components/playerComponent/Player";
 import Collection from "./components/collectionComponent/Collection";
+import FantasyTeam from "./components/FantasyTeam/FantasyTeam";
 
 function App() {
 	return (
@@ -16,7 +17,8 @@ function App() {
 					<Routes>
 						<Route path="/" element={<HomeScreen />} />
 						<Route path="/player" element={<Player />} />
-						<Route path="/collection" element={<Collection />} />
+						<Route path="/roster" element={<Collection />} />
+						<Route path="/starting-lineup" element={<FantasyTeam />} />
 					</Routes>
 				</div>
 				<Footer /> {/* Use the Footer component */}

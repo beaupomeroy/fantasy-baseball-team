@@ -9,6 +9,7 @@
     box-sizing: border-box;
     position: fixed; /* Fix the header to the top of the page */
     top: 0; /* Ensure it stays at the top */
+    z-index: 1000; 
   }
   
   .navList {

@@ -14,10 +14,10 @@ function Header() {
 						<Link to={`/player`}>Player</Link>
 					</li>
 					<li className={styles.navItem}>
-						<Link to="/collection">Collection</Link>
+						<Link to="/roster">Roster</Link>
 					</li>
 					<li className={styles.navItem}>
-						<Link to="/team">Team</Link>
+						<Link to="/starting-lineup">Starting Lineup</Link>
 					</li>
 				</ul>
 			</nav>

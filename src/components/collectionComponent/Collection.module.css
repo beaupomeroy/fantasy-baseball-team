@@ -1,29 +1,32 @@
 .container {
     padding: 20px;
+    width: 90vw;
+    display:grid;
+    overflow: auto;
+    position: relative; 
+  }
+
+  .category {
+    margin-bottom: 40px;
   }
   
-  /* Styles for each card in the collection */
-  .card {
-    background-color: #f9f9f9; /* Light background for visibility */
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px;
-    width: 200px; /* Adjust width as needed */
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
+  .card:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
   }
   
-  /* Ensures the image fits the card */
+  .cardContainer{
+    width: 90vw;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
   .image {
-    width: 100%; /* Full width of the card */
+    width: 100%; /* Ensure image fits the card */
     height: auto;
     border-radius: 4px;
     margin-bottom: 10px;
   }
   
-  /* Title style */
   h3 {
     font-size: 1.2rem;
     margin: 10px 0;
@@ -31,14 +34,12 @@
     font-weight: bold;
   }
   
-  /* Styling for text paragraphs */
   p {
     font-size: 0.9rem;
     margin: 5px 0;
     color: #333; /* Dark text color for contrast */
   }
   
-  /* Optional: Adding a hover effect if needed */
-  .card:hover {
-    background-color: #f0f0f0; /* Slightly darker background on hover */
+  .card * {
+    flex:1;
   }

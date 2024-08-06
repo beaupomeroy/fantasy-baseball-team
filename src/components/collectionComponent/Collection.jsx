@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Collection.module.css";
+import { useLocation } from "react-router-dom";
+import FlippableCard from "../FlippableCardComponent/FlippableCard";
+// import styles from "../styles.css";
 
 const Collection = () => {
+	let location = useLocation();
 	const [collectionHitters, setCollectionHitters] = useState([]);
 	const [collectionRelievers, setCollectionRelievers] = useState([]);
 	const [collectionStartingPitchers, setCollectionStartingPitchers] = useState(
@@ -45,73 +49,68 @@ const Collection = () => {
 		fetchCollection();
 	}, []);
 
+	const handleAddToFantasyTeam = async (player) => {
+		try {
+			console.log("PLAYER", player);
+			await axios.post("http://localhost:8080/api/myFantasyTeam", player);
+			alert("Added to fantasy team!");
+		} catch (error) {
+			setError("Error adding to fantasy team");
+		}
+	};
+
 	if (error) return <div>{error}</div>;
 
 	return (
 		<div className={styles.container}>
-			<h1>My Collection</h1>
+			<h1>Roster</h1>
 
 			<section className={styles.category}>
 				<h2>Relievers</h2>
-				<ul>
+				<div className={styles.cardContainer}>
 					{collectionRelievers &&
 						collectionRelievers.map((player) => (
-							<li key={player._id || player.name} className={styles.card}>
-								<img
-									src={player.imageUrl || "default-image-url"} // Fallback URL in case imageUrl is missing
-									alt={player.name}
-									className={styles.image}
+							<div key={player._id || player.name} className="">
+								<FlippableCard
+									player={player}
+									handleAdd={handleAddToFantasyTeam}
+									location={location.pathname}
 								/>
-								<h3>{player.name}</h3>
-								<p>Position: {player.position}</p>
-								<p>ERA: {player.era}</p>
-								<p>Saves: {player.saves}</p>
-								<p>Strikeouts: {player.strikeouts}</p>
-							</li>
+							</div>
 						))}
-				</ul>
+				</div>
 			</section>
 
 			<section className={styles.category}>
 				<h2>Hitters</h2>
-				<ul>
+				<div className={styles.cardContainer}>
 					{collectionHitters &&
 						collectionHitters.map((player) => (
-							<li key={player._id || player.name} className={styles.card}>
-								<img
-									src={player.imageUrl || "default-image-url"} // Fallback URL in case imageUrl is missing
-									alt={player.name}
-									className={styles.image}
+							<div key={player._id || player.name} className="">
+								<FlippableCard
+									player={player}
+									handleAdd={handleAddToFantasyTeam}
+									location={location.pathname}
 								/>
-								<h3>{player.name}</h3>
-								<p>Position: {player.position}</p>
-								<p>Batting Avg: {player.battingAvg}</p>
-								<p>Home Runs: {player.homeRuns}</p>
-								<p>RBIs: {player.RBIs}</p>
-							</li>
+							</div>
 						))}
-				</ul>
+				</div>
 			</section>
 
 			<section className={styles.category}>
 				<h2>Starting Pitchers</h2>
-				<ul>
+				<div className={styles.cardContainer}>
 					{collectionStartingPitchers &&
 						collectionStartingPitchers.map((player) => (
-							<li key={player._id || player.name} className={styles.card}>
-								<img
-									src={player.imageUrl || "default-image-url"} // Fallback URL in case imageUrl is missing
-									alt={player.name}
-									className={styles.image}
+							<div key={player._id || player.name} className="">
+								<FlippableCard
+									player={player}
+									handleAdd={handleAddToFantasyTeam}
+									location={location.pathname}
 								/>
-								<h3>{player.name}</h3>
-								<p>Position: {player.position}</p>
-								<p>ERA: {player.era}</p>
-								<p>Wins: {player.wins}</p>
-								<p>Strikeouts: {player.strikeouts}</p>
-							</li>
+							</div>
 						))}
-				</ul>
+				</div>
 			</section>
 		</div>
 	);

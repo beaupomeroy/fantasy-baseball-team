@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { ObjectId } = require("mongodb");
 require("dotenv").config();
 const {
 	getTopRelievers,
@@ -31,6 +32,9 @@ const client = new MongoClient(dbURI, {
 let relieverCollection;
 let hitterCollection;
 let startingPitchersCollection;
+let startingPitchersFantasyTeam;
+let relieversFantasyTeam;
+let hittersFantasyTeam;
 
 async function connectToDatabase() {
 	try {
@@ -42,6 +46,11 @@ async function connectToDatabase() {
 		startingPitchersCollection = database.collection(
 			"startingPitchersCollection"
 		);
+		startingPitchersFantasyTeam = database.collection(
+			"startingPitchersFantasyTeam"
+		);
+		relieversFantasyTeam = database.collection("relieversFantasyTeam");
+		hittersFantasyTeam = database.collection("hittersFantasyTeam");
 		console.log(
 			"Pinged your deployment. You successfully connected to MongoDB!"
 		);
@@ -156,6 +165,70 @@ app.post("/api/collection/hitters", async (req, res) => {
 	}
 });
 
+app.post("/api/myFantasyTeam", async (req, res) => {
+	const {
+		name,
+		position,
+		battingAvg,
+		homeRuns,
+		id,
+		RBIs,
+		era,
+		wins,
+		saves,
+		strikeouts,
+		imageUrl,
+	} = req.body;
+
+	try {
+		if (position === "SP") {
+			const newStartingPitcherFantasyTeamCard = {
+				id,
+				name,
+				position,
+				era,
+				wins,
+				strikeouts,
+				imageUrl,
+			};
+			const insertOneStartingPitcherFantasyTeamResult =
+				await startingPitchersFantasyTeam.insertOne(
+					newStartingPitcherFantasyTeamCard
+				);
+			res.status(200).json(insertOneStartingPitcherFantasyTeamResult);
+		} else if (position === "RP") {
+			const newRelieverFantasyTeamCard = {
+				id,
+				name,
+				position,
+				era,
+				saves,
+				strikeouts,
+				imageUrl,
+			};
+			const insertOneRelieverFantasyTeamResult =
+				await relieversFantasyTeam.insertOne(newRelieverFantasyTeamCard);
+			res.status(200).json(insertOneRelieverFantasyTeamResult);
+		} else {
+			// Assuming any other position is a hitter
+			const newHitterFantasyTeamCard = {
+				id,
+				name,
+				position,
+				battingAvg,
+				homeRuns,
+				RBIs,
+				imageUrl,
+			};
+			const insertOneHitterFantasyTeamResult =
+				await hittersFantasyTeam.insertOne(newHitterFantasyTeamCard);
+			res.status(200).json(insertOneHitterFantasyTeamResult);
+		}
+	} catch (err) {
+		res.status(500).send(err.message);
+	}
+});
+
 app.get("/api/collection/relievers", async (req, res) => {
 	try {
 		const collection = await relieverCollection.find().toArray();
@@ -183,16 +256,62 @@ app.get("/api/collection/startingPitchers", async (req, res) => {
 	}
 });
 
+app.get("/api/myFantasyTeam", async (req, res) => {
+	try {
+		const [hitters, relievers, startingPitchers] = await Promise.all([
+			hittersFantasyTeam.find().toArray(),
+			relieversFantasyTeam.find().toArray(),
+			startingPitchersFantasyTeam.find().toArray(),
+		]);
+		const fantasyTeam = { hitters, relievers, startingPitchers };
+		res.json(fantasyTeam);
+	} catch (err) {
+		res.status(500).send(err.message);
+	}
+});
+
 app.delete("/api/cards/:id", async (req, res) => {
 	try {
-		const { id } = req.params;
+		const { _id } = req.params;
 		const result = await collection.deleteOne({
-			_id: new MongoClient.ObjectId(id),
+			_id: new MongoClient.ObjectId(_id),
 		});
 		if (result.deletedCount === 1) {
 			res.json({ success: true });
 		} else {
 			res.status(404).json({ success: false, message: "Card not found" });
+		}
+	} catch (err) {
+		res.status(500).send(err.message);
+	}
+});
+
+app.delete("/api/myFantasyTeam/:_id", async (req, res) => {
+	try {
+		const { _id } = req.params;
+		const { category } = req.body;
+		let objectId = new ObjectId(_id);
+		console.log("new objectid", objectId);
+		let result;
+
+		if (category === "SP") {
+			result = await startingPitchersFantasyTeam.deleteOne({
+				_id: objectId,
+			});
+		} else if (category === "RP") {
+			result = await relieversFantasyTeam.deleteOne({
+				_id: objectId,
+			});
+		} else {
+			result = await hittersFantasyTeam.deleteOne({
+				_id: objectId,
+			});
+		}
+
+		if (result.deletedCount === 1) {
+			res.json({ success: true });
+		} else {
+			res.status(404).json({ success: false, message: "Player not found" });
 		}
 	} catch (err) {
 		res.status(500).send(err.message);
