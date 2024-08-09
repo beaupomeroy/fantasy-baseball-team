@@ -29,28 +29,26 @@ const client = new MongoClient(dbURI, {
 	},
 });
 
-let relieverCollection;
-let hitterCollection;
-let startingPitchersCollection;
-let startingPitchersFantasyTeam;
-let relieversFantasyTeam;
-let hittersFantasyTeam;
+let relieverRoster;
+let hitterRoster;
+let startingPitchersRoster;
+let startingPitchersStartingLineup;
+let relieversStartingLineup;
+let hittersStartingLineup;
 
 async function connectToDatabase() {
 	try {
 		await client.connect();
 		const dbName = "myDatabase";
 		const database = client.db(dbName);
-		relieverCollection = database.collection("relieverCollection");
-		hitterCollection = database.collection("hitterCollection");
-		startingPitchersCollection = database.collection(
-			"startingPitchersCollection"
+		relieverRoster = database.collection("relieverRoster");
+		hitterRoster = database.collection("hitterRoster");
+		startingPitchersRoster = database.collection("startingPitchersRoster");
+		startingPitchersStartingLineup = database.collection(
+			"startingPitchersStartingLineup"
 		);
-		startingPitchersFantasyTeam = database.collection(
-			"startingPitchersFantasyTeam"
-		);
-		relieversFantasyTeam = database.collection("relieversFantasyTeam");
-		hittersFantasyTeam = database.collection("hittersFantasyTeam");
+		relieversStartingLineup = database.collection("relieversStartingLineup");
+		hittersStartingLineup = database.collection("hittersStartingLineup");
 		console.log(
 			"Pinged your deployment. You successfully connected to MongoDB!"
 		);
@@ -90,7 +88,7 @@ connectToDatabase();
 // 	}
 // });
 
-app.post("/api/collection/relievers", async (req, res) => {
+app.post("/api/roster/relievers", async (req, res) => {
 	console.log("BODY", req.body);
 	const { name, position, imageUrl, id, era, saves, strikeouts } = req.body;
 
@@ -105,7 +103,7 @@ app.post("/api/collection/relievers", async (req, res) => {
 	};
 
 	try {
-		const insertOneRelieverResult = await relieverCollection.insertOne(
+		const insertOneRelieverResult = await relieverRoster.insertOne(
 			newRelieverCard
 		);
 		console.log("insertOneRelieverResult", insertOneRelieverResult);
@@ -115,7 +113,7 @@ app.post("/api/collection/relievers", async (req, res) => {
 	}
 });
 
-app.post("/api/collection/startingPitchers", async (req, res) => {
+app.post("/api/roster/startingPitchers", async (req, res) => {
 	console.log("BODY", req.body);
 	const { name, position, imageUrl, id, era, wins, strikeouts } = req.body;
 
@@ -131,7 +129,7 @@ app.post("/api/collection/startingPitchers", async (req, res) => {
 
 	try {
 		const insertOneStartingPitchersResult =
-			await startingPitchersCollection.insertOne(newStartingPitchersCard);
+			await startingPitchersRoster.insertOne(newStartingPitchersCard);
 		console.log(
 			"insertOneStartingPitchersResult",
 			insertOneStartingPitchersResult
@@ -142,7 +140,7 @@ app.post("/api/collection/startingPitchers", async (req, res) => {
 	}
 });
 
-app.post("/api/collection/hitters", async (req, res) => {
+app.post("/api/roster/hitters", async (req, res) => {
 	const { name, position, battingAvg, homeRuns, id, RBIs, imageUrl } = req.body;
 
 	const newHitterCard = {
@@ -156,16 +154,14 @@ app.post("/api/collection/hitters", async (req, res) => {
 	};
 
 	try {
-		const insertOneHitterResult = await hitterCollection.insertOne(
-			newHitterCard
-		);
+		const insertOneHitterResult = await hitterRoster.insertOne(newHitterCard);
 		res.status(200).json(insertOneHitterResult);
 	} catch (err) {
 		res.status(500).send(err.message);
 	}
 });
 
-app.post("/api/myFantasyTeam", async (req, res) => {
+app.post("/api/starting-lineup", async (req, res) => {
 	const {
 		name,
 		position,
@@ -182,7 +178,7 @@ app.post("/api/myFantasyTeam", async (req, res) => {
 
 	try {
 		if (position === "SP") {
-			const newStartingPitcherFantasyTeamCard = {
+			const newStartingPitcherStartingLineupCard = {
 				id,
 				name,
 				position,
@@ -191,13 +187,13 @@ app.post("/api/myFantasyTeam", async (req, res) => {
 				strikeouts,
 				imageUrl,
 			};
-			const insertOneStartingPitcherFantasyTeamResult =
-				await startingPitchersFantasyTeam.insertOne(
-					newStartingPitcherFantasyTeamCard
+			const insertOneStartingPitcherStartingLineupResult =
+				await startingPitchersStartingLineup.insertOne(
+					newStartingPitcherStartingLineupCard
 				);
-			res.status(200).json(insertOneStartingPitcherFantasyTeamResult);
+			res.status(200).json(insertOneStartingPitcherStartingLineupResult);
 		} else if (position === "RP") {
-			const newRelieverFantasyTeamCard = {
+			const newRelieverStartingLineupCard = {
 				id,
 				name,
 				position,
@@ -206,12 +202,12 @@ app.post("/api/myFantasyTeam", async (req, res) => {
 				strikeouts,
 				imageUrl,
 			};
-			const insertOneRelieverFantasyTeamResult =
-				await relieversFantasyTeam.insertOne(newRelieverFantasyTeamCard);
-			res.status(200).json(insertOneRelieverFantasyTeamResult);
+			const insertOneRelieverStartingLineupResult =
+				await relieversStartingLineup.insertOne(newRelieverStartingLineupCard);
+			res.status(200).json(insertOneRelieverStartingLineupResult);
 		} else {
 			// Assuming any other position is a hitter
-			const newHitterFantasyTeamCard = {
+			const newHitterStartingLineupCard = {
 				id,
 				name,
 				position,
@@ -220,51 +216,51 @@ app.post("/api/myFantasyTeam", async (req, res) => {
 				RBIs,
 				imageUrl,
 			};
-			const insertOneHitterFantasyTeamResult =
-				await hittersFantasyTeam.insertOne(newHitterFantasyTeamCard);
-			res.status(200).json(insertOneHitterFantasyTeamResult);
+			const insertOneHitterStartingLineupResult =
+				await hittersStartingLineup.insertOne(newHitterStartingLineupCard);
+			res.status(200).json(insertOneHitterStartingLineupResult);
 		}
 	} catch (err) {
 		res.status(500).send(err.message);
 	}
 });
 
-app.get("/api/collection/relievers", async (req, res) => {
+app.get("/api/roster/relievers", async (req, res) => {
 	try {
-		const collection = await relieverCollection.find().toArray();
-		res.json(collection);
+		const roster = await relieverRoster.find().toArray();
+		res.json(roster);
 	} catch (err) {
 		res.status(500).send(err.message);
 	}
 });
 
-app.get("/api/collection/hitters", async (req, res) => {
+app.get("/api/roster/hitters", async (req, res) => {
 	try {
-		const collection = await hitterCollection.find().toArray();
-		res.json(collection);
+		const roster = await hitterRoster.find().toArray();
+		res.json(roster);
 	} catch (err) {
 		res.status(500).send(err.message);
 	}
 });
 
-app.get("/api/collection/startingPitchers", async (req, res) => {
+app.get("/api/roster/startingPitchers", async (req, res) => {
 	try {
-		const collection = await startingPitchersCollection.find().toArray();
-		res.json(collection);
+		const roster = await startingPitchersRoster.find().toArray();
+		res.json(roster);
 	} catch (err) {
 		res.status(500).send(err.message);
 	}
 });
 
-app.get("/api/myFantasyTeam", async (req, res) => {
+app.get("/api/starting-lineup", async (req, res) => {
 	try {
 		const [hitters, relievers, startingPitchers] = await Promise.all([
-			hittersFantasyTeam.find().toArray(),
-			relieversFantasyTeam.find().toArray(),
-			startingPitchersFantasyTeam.find().toArray(),
+			hittersStartingLineup.find().toArray(),
+			relieversStartingLineup.find().toArray(),
+			startingPitchersStartingLineup.find().toArray(),
 		]);
-		const fantasyTeam = { hitters, relievers, startingPitchers };
-		res.json(fantasyTeam);
+		const startingLineup = { hitters, relievers, startingPitchers };
+		res.json(startingLineup);
 	} catch (err) {
 		res.status(500).send(err.message);
 	}
@@ -286,7 +282,7 @@ app.delete("/api/cards/:id", async (req, res) => {
 	}
 });
 
-app.delete("/api/collection/:_id", async (req, res) => {
+app.delete("/api/roster/:_id", async (req, res) => {
 	try {
 		const { _id } = req.params;
 		const { category } = req.body;
@@ -295,15 +291,15 @@ app.delete("/api/collection/:_id", async (req, res) => {
 		let result;
 
 		if (category === "SP") {
-			result = await startingPitchersCollection.deleteOne({
+			result = await startingPitchersRoster.deleteOne({
 				_id: objectId,
 			});
 		} else if (category === "RP") {
-			result = await relieverCollection.deleteOne({
+			result = await relieverRoster.deleteOne({
 				_id: objectId,
 			});
 		} else {
-			result = await hitterCollection.deleteOne({
+			result = await hitterRoster.deleteOne({
 				_id: objectId,
 			});
 		}
@@ -318,7 +314,7 @@ app.delete("/api/collection/:_id", async (req, res) => {
 	}
 });
 
-app.delete("/api/myFantasyTeam/:_id", async (req, res) => {
+app.delete("/api/starting-lineup/:_id", async (req, res) => {
 	try {
 		const { _id } = req.params;
 		const { category } = req.body;
@@ -327,15 +323,15 @@ app.delete("/api/myFantasyTeam/:_id", async (req, res) => {
 		let result;
 
 		if (category === "SP") {
-			result = await startingPitchersFantasyTeam.deleteOne({
+			result = await startingPitchersStartingLineup.deleteOne({
 				_id: objectId,
 			});
 		} else if (category === "RP") {
-			result = await relieversFantasyTeam.deleteOne({
+			result = await relieversStartingLineup.deleteOne({
 				_id: objectId,
 			});
 		} else {
-			result = await hittersFantasyTeam.deleteOne({
+			result = await hittersStartingLineup.deleteOne({
 				_id: objectId,
 			});
 		}

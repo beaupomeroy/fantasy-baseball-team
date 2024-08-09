@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import styles from "./FantasyTeam.module.css";
+import styles from "./StartingLineup.module.css";
 import FlippableCard from "../FlippableCardComponent/FlippableCard";
 import { useLocation } from "react-router-dom";
 import {
@@ -9,7 +9,7 @@ import {
 	LineupRelieversContext,
 } from "../../Context";
 
-const FantasyTeam = () => {
+const StartingLineup = () => {
 	const { lineupHitters, setLineupHitters } = useContext(LineupHittersContext);
 	const { lineupStartingPitchers, setLineupStartingPitchers } = useContext(
 		LineupStartingPitchersContext
@@ -23,10 +23,10 @@ const FantasyTeam = () => {
 	let location = useLocation();
 
 	useEffect(() => {
-		const fetchMyFantasyTeam = async () => {
+		const fetchStartingLineup = async () => {
 			try {
 				const responses = await axios.get(
-					"http://localhost:8080/api/myFantasyTeam"
+					"http://localhost:8080/api/starting-lineup"
 				);
 				const { hitters, relievers, startingPitchers } = responses.data;
 				setLineupHitters(hitters);
@@ -39,7 +39,7 @@ const FantasyTeam = () => {
 			}
 		};
 
-		fetchMyFantasyTeam();
+		fetchStartingLineup();
 	}, [setLineupHitters, setLineupRelievers, setLineupStartingPitchers]);
 
 	if (loading) return <div>Loading...</div>;
@@ -61,7 +61,7 @@ const FantasyTeam = () => {
 		console.log("Attempting to delete player:", player);
 		try {
 			const response = await axios.delete(
-				`http://localhost:8080/api/myFantasyTeam/${player._id}`,
+				`http://localhost:8080/api/starting-lineup/${player._id}`,
 				{
 					data: { category: player.position },
 				}
@@ -145,4 +145,4 @@ const FantasyTeam = () => {
 	);
 };
 
-export default FantasyTeam;
+export default StartingLineup;

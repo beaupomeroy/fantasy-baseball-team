@@ -35,35 +35,32 @@ const Player = () => {
 		fetchData();
 	}, []);
 
-	const handleAddToRelieverCollection = async (player) => {
+	const handleAddToRelieverRoster = async (player) => {
 		try {
 			console.log("PLAYER", player);
-			await axios.post(
-				"http://localhost:8080/api/collection/relievers",
-				player
-			);
+			await axios.post("http://localhost:8080/api/roster/relievers", player);
 			alert("Added to roster!");
 		} catch (error) {
 			setError("Error adding to roster");
 		}
 	};
 
-	const handleAddToHitterCollection = async (player) => {
+	const handleAddToHitterRoster = async (player) => {
 		try {
 			console.log("PLAYER", player);
-			await axios.post("http://localhost:8080/api/collection/hitters", player);
+			await axios.post("http://localhost:8080/api/roster/hitters", player);
 			alert("Added to roster!");
 		} catch (error) {
 			setError("Error adding to roster");
 		}
 	};
 
-	const handleAddToStartingPitchersCollection = async (player) => {
+	const handleAddToStartingPitchersRoster = async (player) => {
 		try {
 			console.log("PLAYER", player);
 			// Send the player data to the backend to be added to the collection
 			await axios.post(
-				"http://localhost:8080/api/collection/startingPitchers",
+				"http://localhost:8080/api/roster/startingPitchers",
 				player
 			);
 			alert("Added to roster!");
@@ -88,7 +85,7 @@ const Player = () => {
 						<div key={player._id || player.name} className="">
 							<FlippableCard
 								player={player}
-								handleAdd={handleAddToRelieverCollection}
+								handleAdd={handleAddToRelieverRoster}
 								location={location.pathname}
 							/>
 						</div>
@@ -105,7 +102,7 @@ const Player = () => {
 						<div key={player._id || player.name} className="">
 							<FlippableCard
 								player={player}
-								handleAdd={handleAddToHitterCollection}
+								handleAdd={handleAddToHitterRoster}
 								location={location.pathname}
 							/>
 						</div>
@@ -122,7 +119,7 @@ const Player = () => {
 						<div key={player._id || player.name} className="">
 							<FlippableCard
 								player={player}
-								handleAdd={handleAddToStartingPitchersCollection}
+								handleAdd={handleAddToStartingPitchersRoster}
 								location={location.pathname}
 							/>
 						</div>

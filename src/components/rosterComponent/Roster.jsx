@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import styles from "./Collection.module.css";
+import styles from "./Roster.module.css";
 import { useLocation } from "react-router-dom";
 import FlippableCard from "../FlippableCardComponent/FlippableCard";
 // import styles from "../styles.css";
@@ -10,7 +10,7 @@ import {
 	RosterRelieversContext,
 } from "../../Context";
 
-const Collection = () => {
+const Roster = () => {
 	let location = useLocation();
 	const { rosterHitters, setRosterHitters } = useContext(RosterHittersContext);
 	const { rosterStartingPitchers, setRosterStartingPitchers } = useContext(
@@ -27,15 +27,15 @@ const Collection = () => {
 		setRosterRelievers([]);
 		setRosterStartingPitchers([]);
 
-		const fetchCollection = async () => {
+		const fetchRoster = async () => {
 			console.log("FETCH CALL");
 			try {
 				// Fetch all data in parallel
 				const [hittersResponse, relieversResponse, startingPitchersResponse] =
 					await Promise.all([
-						axios.get("http://localhost:8080/api/collection/hitters"),
-						axios.get("http://localhost:8080/api/collection/relievers"),
-						axios.get("http://localhost:8080/api/collection/startingPitchers"),
+						axios.get("http://localhost:8080/api/roster/hitters"),
+						axios.get("http://localhost:8080/api/roster/relievers"),
+						axios.get("http://localhost:8080/api/roster/startingPitchers"),
 					]);
 
 				// Log the response data
@@ -49,17 +49,17 @@ const Collection = () => {
 				setRosterStartingPitchers(startingPitchersResponse.data || []);
 			} catch (error) {
 				console.log("ERROR", error);
-				setError("Error fetching collection");
+				setError("Error fetching roster");
 			}
 		};
 
-		fetchCollection();
+		fetchRoster();
 	}, []);
 
-	const handleAddToFantasyTeam = async (player) => {
+	const handleAddToStartingLineup = async (player) => {
 		try {
 			console.log("PLAYER", player);
-			await axios.post("http://localhost:8080/api/myFantasyTeam", player);
+			await axios.post("http://localhost:8080/api/starting-lineup", player);
 			alert("Added to starting lineup!");
 		} catch (error) {
 			setError("Error adding to starting lineup");
@@ -73,7 +73,7 @@ const Collection = () => {
 		console.log("Attempting to delete player:", player);
 		try {
 			const response = await axios.delete(
-				`http://localhost:8080/api/collection/${player._id}`,
+				`http://localhost:8080/api/roster/${player._id}`,
 				{
 					data: { category: player.position },
 				}
@@ -112,7 +112,7 @@ const Collection = () => {
 							<div key={player._id || player.name} className="">
 								<FlippableCard
 									player={player}
-									handleAdd={handleAddToFantasyTeam}
+									handleAdd={handleAddToStartingLineup}
 									handleRemove={handleDeleteFromRoster}
 									location={location.pathname}
 								/>
@@ -129,7 +129,7 @@ const Collection = () => {
 							<div key={player._id || player.name} className="">
 								<FlippableCard
 									player={player}
-									handleAdd={handleAddToFantasyTeam}
+									handleAdd={handleAddToStartingLineup}
 									handleRemove={handleDeleteFromRoster}
 									location={location.pathname}
 								/>
@@ -146,7 +146,7 @@ const Collection = () => {
 							<div key={player._id || player.name} className="">
 								<FlippableCard
 									player={player}
-									handleAdd={handleAddToFantasyTeam}
+									handleAdd={handleAddToStartingLineup}
 									handleRemove={handleDeleteFromRoster}
 									location={location.pathname}
 								/>
@@ -158,4 +158,4 @@ const Collection = () => {
 	);
 };
 
-export default Collection;
+export default Roster;

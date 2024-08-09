@@ -5,8 +5,8 @@ import HomeScreen from "./components/homeComponent/HomeScreen";
 import Header from "./components/Header"; // Import the Header component
 import Footer from "./components/Footer"; // Import the Footer component
 import Player from "./components/playerComponent/Player";
-import Collection from "./components/collectionComponent/Collection";
-import FantasyTeam from "./components/FantasyTeam/FantasyTeam";
+import Roster from "./components/rosterComponent/Roster";
+import StartingLineup from "./components/StartingLineup/StartingLineup";
 import {
 	RosterHittersContext,
 	RosterStartingPitchersContext,
@@ -50,11 +50,11 @@ function App() {
 												<Route path="/" element={<HomeScreen />} />
 												<Route path="/player" element={<Player />} />
 
-												<Route path="/roster" element={<Collection />} />
+												<Route path="/roster" element={<Roster />} />
 
 												<Route
 													path="/starting-lineup"
-													element={<FantasyTeam />}
+													element={<StartingLineup />}
 												/>
 											</Routes>
 										</div>
