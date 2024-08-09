@@ -42,9 +42,9 @@ const Player = () => {
 				"http://localhost:8080/api/collection/relievers",
 				player
 			);
-			alert("Added to collection!");
+			alert("Added to roster!");
 		} catch (error) {
-			setError("Error adding to collection");
+			setError("Error adding to roster");
 		}
 	};
 
@@ -52,9 +52,9 @@ const Player = () => {
 		try {
 			console.log("PLAYER", player);
 			await axios.post("http://localhost:8080/api/collection/hitters", player);
-			alert("Added to collection!");
+			alert("Added to roster!");
 		} catch (error) {
-			setError("Error adding to collection");
+			setError("Error adding to roster");
 		}
 	};
 
@@ -66,9 +66,9 @@ const Player = () => {
 				"http://localhost:8080/api/collection/startingPitchers",
 				player
 			);
-			alert("Added to collection!");
+			alert("Added to roster!");
 		} catch (error) {
-			setError("Error adding to collection");
+			setError("Error adding to roster");
 		}
 	};
 

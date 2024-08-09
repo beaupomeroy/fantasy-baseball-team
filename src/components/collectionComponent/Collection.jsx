@@ -1,24 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styles from "./Collection.module.css";
 import { useLocation } from "react-router-dom";
 import FlippableCard from "../FlippableCardComponent/FlippableCard";
 // import styles from "../styles.css";
+import {
+	RosterHittersContext,
+	RosterStartingPitchersContext,
+	RosterRelieversContext,
+} from "../../Context";
 
 const Collection = () => {
 	let location = useLocation();
-	const [collectionHitters, setCollectionHitters] = useState([]);
-	const [collectionRelievers, setCollectionRelievers] = useState([]);
-	const [collectionStartingPitchers, setCollectionStartingPitchers] = useState(
-		[]
+	const { rosterHitters, setRosterHitters } = useContext(RosterHittersContext);
+	const { rosterStartingPitchers, setRosterStartingPitchers } = useContext(
+		RosterStartingPitchersContext
+	);
+	const { rosterRelievers, setRosterRelievers } = useContext(
+		RosterRelieversContext
 	);
 	const [error, setError] = useState("");
 
 	useEffect(() => {
 		// Reset collection data when the component mounts
-		setCollectionHitters([]);
-		setCollectionRelievers([]);
-		setCollectionStartingPitchers([]);
+		setRosterHitters([]);
+		setRosterRelievers([]);
+		setRosterStartingPitchers([]);
 
 		const fetchCollection = async () => {
 			console.log("FETCH CALL");
@@ -37,9 +44,9 @@ const Collection = () => {
 				console.log("STARTING PITCHERS DATA", startingPitchersResponse.data);
 
 				// Set the state with the response data
-				setCollectionHitters(hittersResponse.data || []);
-				setCollectionRelievers(relieversResponse.data || []);
-				setCollectionStartingPitchers(startingPitchersResponse.data || []);
+				setRosterHitters(hittersResponse.data || []);
+				setRosterRelievers(relieversResponse.data || []);
+				setRosterStartingPitchers(startingPitchersResponse.data || []);
 			} catch (error) {
 				console.log("ERROR", error);
 				setError("Error fetching collection");
@@ -53,13 +60,45 @@ const Collection = () => {
 		try {
 			console.log("PLAYER", player);
 			await axios.post("http://localhost:8080/api/myFantasyTeam", player);
-			alert("Added to fantasy team!");
+			alert("Added to starting lineup!");
 		} catch (error) {
-			setError("Error adding to fantasy team");
+			setError("Error adding to starting lineup");
 		}
 	};
 
 	if (error) return <div>{error}</div>;
+
+	//handle
+	const handleDeleteFromRoster = async (player) => {
+		console.log("Attempting to delete player:", player);
+		try {
+			const response = await axios.delete(
+				`http://localhost:8080/api/collection/${player._id}`,
+				{
+					data: { category: player.position },
+				}
+			);
+			console.log("Delete response:", response.data);
+			if (response.data.success) {
+				if (player.position === "SP") {
+					setRosterStartingPitchers((prev) =>
+						prev.filter((p) => p._id !== player._id)
+					);
+				} else if (player.position === "RP") {
+					setRosterRelievers((prev) =>
+						prev.filter((p) => p._id !== player._id)
+					);
+				} else {
+					setRosterHitters((prev) => prev.filter((p) => p._id !== player._id));
+				}
+			} else {
+				setError("Player not found");
+			}
+		} catch (error) {
+			console.error("Error removing player:", error);
+			setError("Error removing player from Roster");
+		}
+	};
 
 	return (
 		<div className={styles.container}>
@@ -68,12 +107,13 @@ const Collection = () => {
 			<section className={styles.category}>
 				<h2>Relievers</h2>
 				<div className={styles.cardContainer}>
-					{collectionRelievers &&
-						collectionRelievers.map((player) => (
+					{rosterRelievers &&
+						rosterRelievers.map((player) => (
 							<div key={player._id || player.name} className="">
 								<FlippableCard
 									player={player}
 									handleAdd={handleAddToFantasyTeam}
+									handleRemove={handleDeleteFromRoster}
 									location={location.pathname}
 								/>
 							</div>
@@ -84,12 +124,13 @@ const Collection = () => {
 			<section className={styles.category}>
 				<h2>Hitters</h2>
 				<div className={styles.cardContainer}>
-					{collectionHitters &&
-						collectionHitters.map((player) => (
+					{rosterHitters &&
+						rosterHitters.map((player) => (
 							<div key={player._id || player.name} className="">
 								<FlippableCard
 									player={player}
 									handleAdd={handleAddToFantasyTeam}
+									handleRemove={handleDeleteFromRoster}
 									location={location.pathname}
 								/>
 							</div>
@@ -100,12 +141,13 @@ const Collection = () => {
 			<section className={styles.category}>
 				<h2>Starting Pitchers</h2>
 				<div className={styles.cardContainer}>
-					{collectionStartingPitchers &&
-						collectionStartingPitchers.map((player) => (
+					{rosterStartingPitchers &&
+						rosterStartingPitchers.map((player) => (
 							<div key={player._id || player.name} className="">
 								<FlippableCard
 									player={player}
 									handleAdd={handleAddToFantasyTeam}
+									handleRemove={handleDeleteFromRoster}
 									location={location.pathname}
 								/>
 							</div>

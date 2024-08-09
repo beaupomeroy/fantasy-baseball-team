@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
 import { Card, CardContent } from "@mui/material";
 import styles from "./Flippable.module.css";
 import Button from "@mui/material/Button";
@@ -31,19 +30,43 @@ const FlippableCard = ({ player, handleAdd, location, handleRemove }) => {
 									handleAdd(player);
 								}}
 							>
-								Add to Collection
+								Add to Roster
 							</Button>
 						)}
 						{location === "/roster" && (
+							<>
+								<Button
+									variant="contained"
+									color="secondary"
+									onClick={(e) => {
+										e.stopPropagation();
+										handleAdd(player);
+									}}
+								>
+									Add to Starting Lineup
+								</Button>
+								<Button
+									variant="contained"
+									color="error"
+									onClick={(e) => {
+										e.stopPropagation();
+										handleRemove(player);
+									}}
+								>
+									Remove from Roster
+								</Button>
+							</>
+						)}
+						{location === "/starting-lineup" && (
 							<Button
 								variant="contained"
-								color="secondary"
+								color="error"
 								onClick={(e) => {
 									e.stopPropagation();
-									handleAdd(player);
+									handleRemove(player);
 								}}
 							>
-								Add to Fantasy Team
+								Remove from Lineup
 							</Button>
 						)}
 					</CardContent>

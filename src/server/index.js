@@ -286,6 +286,38 @@ app.delete("/api/cards/:id", async (req, res) => {
 	}
 });
 
+app.delete("/api/collection/:_id", async (req, res) => {
+	try {
+		const { _id } = req.params;
+		const { category } = req.body;
+		let objectId = new ObjectId(_id);
+		console.log("new objectid", objectId);
+		let result;
+
+		if (category === "SP") {
+			result = await startingPitchersCollection.deleteOne({
+				_id: objectId,
+			});
+		} else if (category === "RP") {
+			result = await relieverCollection.deleteOne({
+				_id: objectId,
+			});
+		} else {
+			result = await hitterCollection.deleteOne({
+				_id: objectId,
+			});
+		}
+
+		if (result.deletedCount === 1) {
+			res.json({ success: true });
+		} else {
+			res.status(404).json({ success: false, message: "Player not found" });
+		}
+	} catch (err) {
+		res.status(500).send(err.message);
+	}
+});
+
 app.delete("/api/myFantasyTeam/:_id", async (req, res) => {
 	try {
 		const { _id } = req.params;
