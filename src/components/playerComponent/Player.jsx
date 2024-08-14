@@ -8,6 +8,16 @@ const Player = () => {
 	const [relievers, setRelievers] = useState([]);
 	const [hitters, setHitters] = useState([]);
 	const [startingPitchers, setStartingPitchers] = useState([]);
+	const [rosterCounts, setRosterCounts] = useState({
+		relievers: 0,
+		hitters: 0,
+		startingPitchers: 0,
+	});
+	const [existingRoster, setExistingRoster] = useState({
+		relievers: [],
+		hitters: [],
+		startingPitchers: [],
+	});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	let location = useLocation();
@@ -25,6 +35,27 @@ const Player = () => {
 				setRelievers(relieversResponse.data);
 				setHitters(hittersResponse.data);
 				setStartingPitchers(startingPitchersResponse.data);
+
+				// Fetch existing roster
+				const [relieversRoster, hittersRoster, startingPitchersRoster] =
+					await Promise.all([
+						axios.get("http://localhost:8080/api/roster/relievers"),
+						axios.get("http://localhost:8080/api/roster/hitters"),
+						axios.get("http://localhost:8080/api/roster/startingPitchers"),
+					]);
+
+				setExistingRoster({
+					relievers: relieversRoster.data,
+					hitters: hittersRoster.data,
+					startingPitchers: startingPitchersRoster.data,
+				});
+
+				// Update roster counts
+				setRosterCounts({
+					relievers: relieversRoster.data.length,
+					hitters: hittersRoster.data.length,
+					startingPitchers: startingPitchersRoster.data.length,
+				});
 			} catch (error) {
 				setError("Error fetching data");
 			} finally {
@@ -35,37 +66,41 @@ const Player = () => {
 		fetchData();
 	}, []);
 
-	const handleAddToRelieverRoster = async (player) => {
-		try {
-			console.log("PLAYER", player);
-			await axios.post("http://localhost:8080/api/roster/relievers", player);
-			alert("Added to roster!");
-		} catch (error) {
-			setError("Error adding to roster");
-		}
+	const isDuplicate = (player, category) => {
+		return existingRoster[category].some(
+			(existingPlayer) => existingPlayer.id === player.id
+		);
 	};
 
-	const handleAddToHitterRoster = async (player) => {
-		try {
-			console.log("PLAYER", player);
-			await axios.post("http://localhost:8080/api/roster/hitters", player);
-			alert("Added to roster!");
-		} catch (error) {
-			setError("Error adding to roster");
-		}
-	};
+	const handleAddToRoster = async (player, category) => {
+		// Combine counts from all categories to check against the 26-player limit
+		const totalRosterCount = Object.values(rosterCounts).reduce(
+			(a, b) => a + b,
+			0
+		);
 
-	const handleAddToStartingPitchersRoster = async (player) => {
+		if (totalRosterCount >= 26) {
+			alert("Cannot add more players. Roster is full.");
+			return;
+		}
+		if (isDuplicate(player, category)) {
+			alert("Player is already in the roster.");
+			return;
+		}
+
 		try {
-			console.log("PLAYER", player);
-			// Send the player data to the backend to be added to the collection
-			await axios.post(
-				"http://localhost:8080/api/roster/startingPitchers",
-				player
-			);
-			alert("Added to roster!");
+			await axios.post(`http://localhost:8080/api/roster/${category}`, player);
+			alert(`Added to ${category} roster!`);
+
+			// Update roster counts
+			setRosterCounts((prev) => ({ ...prev, [category]: prev[category] + 1 }));
+			// Update existing roster data
+			setExistingRoster((prev) => ({
+				...prev,
+				[category]: [...prev[category], player],
+			}));
 		} catch (error) {
-			setError("Error adding to roster");
+			setError(`Error adding to ${category} roster`);
 		}
 	};
 
@@ -74,7 +109,7 @@ const Player = () => {
 
 	return (
 		<div className={styles.container}>
-			<h1>All Baseball Players</h1>
+			<h1>View Top Players</h1>
 
 			<section className={styles.category}>
 				<div>
@@ -85,7 +120,7 @@ const Player = () => {
 						<div key={player._id || player.name} className="">
 							<FlippableCard
 								player={player}
-								handleAdd={handleAddToRelieverRoster}
+								handleAdd={() => handleAddToRoster(player, "relievers")}
 								location={location.pathname}
 							/>
 						</div>
@@ -102,7 +137,7 @@ const Player = () => {
 						<div key={player._id || player.name} className="">
 							<FlippableCard
 								player={player}
-								handleAdd={handleAddToHitterRoster}
+								handleAdd={() => handleAddToRoster(player, "hitters")}
 								location={location.pathname}
 							/>
 						</div>
@@ -119,7 +154,7 @@ const Player = () => {
 						<div key={player._id || player.name} className="">
 							<FlippableCard
 								player={player}
-								handleAdd={handleAddToStartingPitchersRoster}
+								handleAdd={() => handleAddToRoster(player, "startingPitchers")}
 								location={location.pathname}
 							/>
 						</div>

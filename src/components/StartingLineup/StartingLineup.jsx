@@ -45,17 +45,39 @@ const StartingLineup = () => {
 	if (loading) return <div>Loading...</div>;
 	if (error) return <div>{error}</div>;
 
-	const groupHittersByPosition = (hitters) => {
-		if (!Array.isArray(hitters)) return {};
-		return hitters.reduce((acc, hitter) => {
+	const limitHittersByPosition = (hitters) => {
+		const positionLimits = {
+			OF: 3, // Limit to 3 outfielders
+			C: 1,
+			"1B": 1,
+			"2B": 1,
+			"3B": 1,
+			SS: 1,
+			DH: 1,
+			// Add other positions as needed
+		};
+
+		const limitedHitters = [];
+		const positionCount = {};
+
+		hitters.forEach((hitter) => {
 			const position = hitter.position || "Unknown";
-			if (!acc[position]) acc[position] = [];
-			acc[position].push(hitter);
-			return acc;
-		}, {});
+			if (!positionLimits[position]) return; // Ignore positions not in the limit
+
+			if (!positionCount[position]) {
+				positionCount[position] = 0;
+			}
+
+			if (positionCount[position] < positionLimits[position]) {
+				limitedHitters.push(hitter);
+				positionCount[position]++;
+			}
+		});
+
+		return limitedHitters;
 	};
 
-	const groupedHitters = groupHittersByPosition(lineupHitters);
+	const limitedHitters = limitHittersByPosition(lineupHitters);
 
 	const handleDeleteFromStartingLineup = async (player) => {
 		console.log("Attempting to delete player:", player);
@@ -124,22 +146,18 @@ const StartingLineup = () => {
 
 			<section className={styles.category}>
 				<h2>Hitters</h2>
-				{Object.keys(groupedHitters).map((position) => (
-					<div key={position} className={styles.positionGroup}>
-						<h3>{position}</h3>
-						<div className={styles.cardContainer}>
-							{groupedHitters[position].map((player) => (
-								<div key={player._id || player.name} className="">
-									<FlippableCard
-										player={player}
-										location={location.pathname}
-										handleRemove={handleDeleteFromStartingLineup}
-									/>
-								</div>
-							))}
+				<div className={styles.cardContainer}>
+					{limitedHitters.map((player, index) => (
+						<div key={player._id || player.name} className={styles.cardItem}>
+							<span className={styles.lineupNumber}>{index + 1}</span>
+							<FlippableCard
+								player={player}
+								location={location.pathname}
+								handleRemove={handleDeleteFromStartingLineup}
+							/>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</section>
 		</div>
 	);

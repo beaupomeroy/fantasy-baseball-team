@@ -22,8 +22,12 @@ function Header() {
 				</ul>
 			</nav>
 			<div className={styles.authButtons}>
-				<button className={styles.button}>Sign In</button>
-				<button className={styles.button}>Register</button>
+				<Link to="/signin">
+					<button className={styles.button}>Sign In</button>
+				</Link>
+				<Link to="/register">
+					<button className={styles.button}>Register</button>
+				</Link>
 			</div>
 		</header>
 	);

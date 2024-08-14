@@ -7,6 +7,8 @@ import Footer from "./components/Footer"; // Import the Footer component
 import Player from "./components/playerComponent/Player";
 import Roster from "./components/rosterComponent/Roster";
 import StartingLineup from "./components/StartingLineup/StartingLineup";
+import SignIn from "./components/Auth/SignIn";
+import Register from "./components/Auth/Register";
 import {
 	RosterHittersContext,
 	RosterStartingPitchersContext,
@@ -56,6 +58,8 @@ function App() {
 													path="/starting-lineup"
 													element={<StartingLineup />}
 												/>
+												<Route path="/signin" element={<SignIn />} />
+												<Route path="/register" element={<Register />} />
 											</Routes>
 										</div>
 										<Footer /> {/* Use the Footer component */}

@@ -1,0 +1,51 @@
+.root {
+    text-align: center;
+    height: 100vh; /* Full viewport height */
+    width:100vw;
+    background-image: url('../../assets/images/baseball-field.jpg'); /* Background image */
+    background-size: cover;
+    background-position: center;  
+}
+  
+  .welcomeText {
+    padding: 40px 20px; /* Increase padding for more space */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+    color: #fff; /* White text for high contrast */
+    position: relative;
+    z-index: 1; /* Ensure it's above other content */
+    height:300px;
+  }
+
+  .welcomeText h3 {
+    color:#fff;
+    font-size: 2.5rem; /* Larger font size for the main heading */
+    margin-bottom: 10px; /* Space below the main heading */
+  }
+  
+  .welcomeText h6 {
+    font-size: 1.25rem; /* Larger font size for the subheading */
+    margin-bottom: 0; /* Remove space below the subheading */
+  }
+  
+  
+  .features {
+    margin-top:250px;
+    z-index: 1; /* Ensure it's above other content */
+  }
+  
+  .features h4 {
+    font-size: 2rem; /* Larger heading for features section */
+    margin-bottom: 24px;
+  }
+  
+  .cardLink {
+    margin-top:50px;
+    text-decoration: none; /* Remove underline from links */
+    display: block; /* Ensure the link takes up the full card */
+  }
+  
+  .cardLink:hover .card {
+    transform: scale(1.05);
+    cursor: pointer; /* Show pointer cursor to indicate the card is clickable */
+  }
+  

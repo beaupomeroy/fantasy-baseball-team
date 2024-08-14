@@ -1,7 +1,7 @@
 const topHitters2023 = [
 	{
 		name: "Shohei Ohtani",
-		position: "DH/P",
+		position: "DH",
 		battingAvg: 0.304,
 		homeRuns: 46,
 		RBIs: 100,
@@ -64,7 +64,7 @@ const topHitters2023 = [
 	},
 	{
 		name: "Yordan Alvarez",
-		position: "DH/OF",
+		position: "OF",
 		battingAvg: 0.308,
 		homeRuns: 31,
 		RBIs: 97,
@@ -100,7 +100,7 @@ const topHitters2023 = [
 	},
 	{
 		name: "Bryce Harper",
-		position: "DH/OF",
+		position: "OF",
 		battingAvg: 0.293,
 		homeRuns: 18,
 		RBIs: 70,

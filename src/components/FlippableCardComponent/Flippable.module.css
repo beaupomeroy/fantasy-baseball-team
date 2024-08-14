@@ -1,43 +1,86 @@
 .cardContainer {
     perspective: 1000px; /* Gives a 3D effect */
     padding-bottom: 20px;
+    font-family: Arial, Helvetica, sans-serif;
   }
   
   .card {
     position: relative;
-    height: 300px; /* Adjust as needed */
-   width: 200px; /* Adjust as needed */
+    height: 350px; /* Adjust as needed */
+    width: 200px; /* Adjust as needed */
     transition: transform 0.6s;
     transform-style: preserve-3d;
-
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    background: #fff; /* White background for the card */
+    margin:20px;
   }
   
+  .cardFront:hover{
+    transform: translateY(-5px)
+  }
+
+  .cardFrame{
+    height:88%;
+    background-color: white;
+  }
+  
+
   .cardFront,
   .cardBack {
     position: absolute;
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
+    padding: 10px; /* Padding inside the card */
   }
   
   .cardFront {
-    background: #fff;
-    /* Add any other styling you need */
-  }
-  
+    background: linear-gradient(to bottom, #f5f5f5, #e0e0e0); /* Subtle gradient */
+    border-bottom: 2px solid #333; /* Bottom border */
+    text-align: center; /* Center-align text */
+    background: rgb(153,34,195);
+    background: linear-gradient(0deg, rgba(153,34,195,1) 2%, rgba(45,81,253,1) 42%);
+ }
   .cardBack {
-    background: #f0f0f0;
+    background: rgb(153,34,195);
+    background: linear-gradient(0deg, rgba(153,34,195,1) 2%, rgba(45,81,253,0.7399334733893557) 35%);
     transform: rotateY(180deg);
     /* Add any other styling you need */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
   }
+
   
   .flipped {
     transform: rotateY(180deg);
   }
   
   .image {
-    width: 80%; /* Ensure image fits the card */
+    width: 90%; /* Ensure image fits the card */
     height: auto;
+    border: 2px solid #333; /* Border around image */
     border-radius: 4px;
     margin-bottom: 10px;
+    background-color:white;
   }
+
+  h3 {
+    font-family: 'Trade Gothic', sans-serif;
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+p {
+  font-family: 'Futura', sans-serif;
+  font-size: 14px;
+  margin: 3px 0;
+}
+
+.cardBack p {
+  font-size: 12px;
+  color: #333; /* Darker text color for stats */
+}

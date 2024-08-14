@@ -14,7 +14,7 @@ const FlippableCard = ({ player, handleAdd, location, handleRemove }) => {
 		<div className={styles.cardContainer} onClick={handleClick}>
 			<div className={`${styles.card} ${flipped ? styles.flipped : ""}`}>
 				<Card className={styles.cardFront}>
-					<CardContent>
+					<CardContent className={styles.cardFrame}>
 						<img
 							src={player.imageUrl || "default-image-url"}
 							alt={player.name}

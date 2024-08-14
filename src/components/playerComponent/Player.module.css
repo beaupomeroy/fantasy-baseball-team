@@ -1,6 +1,7 @@
 .container {
   padding: 20px;
   display:grid;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .category {

@@ -1,7 +1,7 @@
 /* App.css */
 .App {
     text-align: center;
-    background-color: blue;
+    background-color: white;
     color: white;
     min-height: 100vh;
     display: flex;
@@ -9,14 +9,24 @@
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
+    font-family: Arial, Helvetica, sans-serif;
   }
   
   h1 {
     margin: 0;
+    color: black;
   }
   body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     height: 100%;
+  }
+
+  h2 {
+    color: black;
+  }
+
+  h4 {
+    color: black;
   }

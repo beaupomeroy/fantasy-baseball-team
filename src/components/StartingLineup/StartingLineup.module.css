@@ -17,6 +17,18 @@
   flex-wrap: wrap;
 }
 
+.cardItem {
+  display: flex;
+  align-items: center; /* Vertically aligns number and card */
+  margin-bottom: 20px; /* Space between cards */
+}
+
+.lineupNumber {
+  font-size: 1.5rem; /* Adjust font size for visibility */
+  margin-right: 10px; /* Space between the number and the card */
+  display: inline-block; /* Ensures proper alignment */
+}
+
 .image {
   width: 100%; /* Ensure image fits the card */
   height: auto;
