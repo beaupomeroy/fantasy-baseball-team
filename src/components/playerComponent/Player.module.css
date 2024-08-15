@@ -2,26 +2,16 @@
   padding: 20px;
   width: 100vw;
   height:100vh;
+  padding-bottom:100px;
   display: grid;
   overflow: auto;
   position: relative;
   background-image: url('../../assets/images/stadium.jpg'); /* Background image */
   background-size: cover;
   background-position: center;
-  overflow: hidden; /* Hide any overflow */
 }
 
-.container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(38, 37, 37, 0.3); /* Adjust rgba values for different fading effects */
-  pointer-events: none; /* Ensure it does not interfere with user interactions */
-  z-index: 1; /* Ensure it sits above the background but below the content */
-}
+
 .category {
   margin-bottom: 40px;
 }

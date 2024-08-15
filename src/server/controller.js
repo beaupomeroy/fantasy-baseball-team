@@ -449,6 +449,24 @@ const topHitters2023 = [
 		imageUrl: "https://a.espncdn.com/i/headshots/mlb/players/full/32525.png",
 		id: "hit49",
 	},
+	{
+		name: "Cal Raleigh",
+		position: "C",
+		battingAvg: 0.232,
+		homeRuns: 30,
+		RBIs: 75,
+		imageUrl: "https://a.espncdn.com/i/headshots/mlb/players/full/41292.png",
+		id: "hit50",
+	},
+	{
+		name: "Yainer Diaz",
+		position: "C",
+		battingAvg: 0.282,
+		homeRuns: 23,
+		RBIs: 60,
+		imageUrl: "https://a.espncdn.com/i/headshots/mlb/players/full/4781491.png",
+		id: "hit51",
+	},
 ];
 
 const topPitchers2023 = [
