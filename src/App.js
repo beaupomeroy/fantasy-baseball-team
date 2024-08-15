@@ -9,6 +9,8 @@ import Roster from "./components/rosterComponent/Roster";
 import StartingLineup from "./components/StartingLineup/StartingLineup";
 import SignIn from "./components/Auth/SignIn";
 import Register from "./components/Auth/Register";
+import { AuthProvider } from "./components/Auth/AuthContext";
+
 import {
 	RosterHittersContext,
 	RosterStartingPitchersContext,
@@ -28,49 +30,53 @@ function App() {
 	const [lineupRelievers, setLineupRelievers] = useState([]);
 
 	return (
-		<RosterHittersContext.Provider value={{ rosterHitters, setRosterHitters }}>
-			<RosterStartingPitchersContext.Provider
-				value={{ rosterStartingPitchers, setRosterStartingPitchers }}
+		<AuthProvider>
+			<RosterHittersContext.Provider
+				value={{ rosterHitters, setRosterHitters }}
 			>
-				<RosterRelieversContext.Provider
-					value={{ rosterRelievers, setRosterRelievers }}
+				<RosterStartingPitchersContext.Provider
+					value={{ rosterStartingPitchers, setRosterStartingPitchers }}
 				>
-					<LineupHittersContext.Provider
-						value={{ lineupHitters, setLineupHitters }}
+					<RosterRelieversContext.Provider
+						value={{ rosterRelievers, setRosterRelievers }}
 					>
-						<LineupStartingPitchersContext.Provider
-							value={{ lineupStartingPitchers, setLineupStartingPitchers }}
+						<LineupHittersContext.Provider
+							value={{ lineupHitters, setLineupHitters }}
 						>
-							<LineupRelieversContext.Provider
-								value={{ lineupRelievers, setLineupRelievers }}
+							<LineupStartingPitchersContext.Provider
+								value={{ lineupStartingPitchers, setLineupStartingPitchers }}
 							>
-								<Router>
-									<div className="App">
-										<Header /> {/* Use the Header component */}
-										<div style={{ paddingTop: "60px" }}>
-											<Routes>
-												<Route path="/" element={<HomeScreen />} />
-												<Route path="/player" element={<Player />} />
+								<LineupRelieversContext.Provider
+									value={{ lineupRelievers, setLineupRelievers }}
+								>
+									<Router>
+										<div className="App">
+											<Header /> {/* Use the Header component */}
+											<div style={{ paddingTop: "60px" }}>
+												<Routes>
+													<Route path="/" element={<HomeScreen />} />
+													<Route path="/player" element={<Player />} />
 
-												<Route path="/roster" element={<Roster />} />
+													<Route path="/roster" element={<Roster />} />
 
-												<Route
-													path="/starting-lineup"
-													element={<StartingLineup />}
-												/>
-												<Route path="/signin" element={<SignIn />} />
-												<Route path="/register" element={<Register />} />
-											</Routes>
+													<Route
+														path="/starting-lineup"
+														element={<StartingLineup />}
+													/>
+													<Route path="/signin" element={<SignIn />} />
+													<Route path="/register" element={<Register />} />
+												</Routes>
+											</div>
+											<Footer /> {/* Use the Footer component */}
 										</div>
-										<Footer /> {/* Use the Footer component */}
-									</div>
-								</Router>
-							</LineupRelieversContext.Provider>
-						</LineupStartingPitchersContext.Provider>
-					</LineupHittersContext.Provider>
-				</RosterRelieversContext.Provider>
-			</RosterStartingPitchersContext.Provider>
-		</RosterHittersContext.Provider>
+									</Router>
+								</LineupRelieversContext.Provider>
+							</LineupStartingPitchersContext.Provider>
+						</LineupHittersContext.Provider>
+					</RosterRelieversContext.Provider>
+				</RosterStartingPitchersContext.Provider>
+			</RosterHittersContext.Provider>
+		</AuthProvider>
 	);
 }
 

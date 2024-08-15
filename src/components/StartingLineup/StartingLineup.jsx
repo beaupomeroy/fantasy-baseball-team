@@ -3,6 +3,7 @@ import axios from "axios";
 import styles from "./StartingLineup.module.css";
 import FlippableCard from "../FlippableCardComponent/FlippableCard";
 import { useLocation } from "react-router-dom";
+import { AuthContext } from "../Auth/AuthContext";
 import {
 	LineupHittersContext,
 	LineupStartingPitchersContext,
@@ -10,6 +11,7 @@ import {
 } from "../../Context";
 
 const StartingLineup = () => {
+	const { user } = useContext(AuthContext);
 	const { lineupHitters, setLineupHitters } = useContext(LineupHittersContext);
 	const { lineupStartingPitchers, setLineupStartingPitchers } = useContext(
 		LineupStartingPitchersContext
@@ -112,7 +114,11 @@ const StartingLineup = () => {
 
 	return (
 		<div className={styles.container}>
-			<h1>Beau's Fantasy Lineup</h1>
+			{user?.name ? (
+				<h1>{user?.name?.toUpperCase()}'s Starting Lineup</h1>
+			) : (
+				<h1>Your Starting Lineup</h1>
+			)}
 
 			<section className={styles.category}>
 				<h2>Starting Pitcher</h2>
@@ -146,7 +152,7 @@ const StartingLineup = () => {
 
 			<section className={styles.category}>
 				<h2>Hitters</h2>
-				<div className={styles.cardContainer}>
+				<div className={`${styles.cardContainer} ${styles.verticalLayout}`}>
 					{limitedHitters.map((player, index) => (
 						<div key={player._id || player.name} className={styles.cardItem}>
 							<span className={styles.lineupNumber}>{index + 1}</span>

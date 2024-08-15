@@ -10,7 +10,7 @@ function HomeScreen() {
 			<div className={styles.welcomeText}>
 				<Container>
 					<Typography variant="h3" gutterBottom>
-						Welcome to Your Baseball Collection
+						Welcome to Your Baseball App
 					</Typography>
 					<Typography variant="h6" gutterBottom>
 						Step into a clutter-free baseball card collection, where your

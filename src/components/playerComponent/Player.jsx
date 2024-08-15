@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styles from "./Player.module.css";
 import { useLocation } from "react-router-dom";
 import FlippableCard from "../FlippableCardComponent/FlippableCard";
+import { AuthContext } from "../Auth/AuthContext";
 
 const Player = () => {
+	const { user } = useContext(AuthContext);
 	const [relievers, setRelievers] = useState([]);
 	const [hitters, setHitters] = useState([]);
 	const [startingPitchers, setStartingPitchers] = useState([]);
@@ -109,7 +111,11 @@ const Player = () => {
 
 	return (
 		<div className={styles.container}>
-			<h1>View Top Players</h1>
+			{user?.name ? (
+				<h1>Welcome {user?.name?.toUpperCase()}!</h1>
+			) : (
+				<h1>View Top Players</h1>
+			)}
 
 			<section className={styles.category}>
 				<div>

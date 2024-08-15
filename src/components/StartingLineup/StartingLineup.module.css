@@ -1,7 +1,15 @@
 .container {
   padding: 20px;
-  display:grid;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  overflow: auto;
+  position: relative;
+  background-image: url('../../assets/images/stadium.jpg'); /* Background image */
+  background-size: auto;
+  background-position: center;
 }
+
 
 .category {
   margin-bottom: 40px;
@@ -11,8 +19,10 @@
   transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
-.cardContainer{
-  width: 90vw;
+.cardContainer {
+  width:80vw;
+  margin-left:100px;
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
 }
@@ -24,9 +34,13 @@
 }
 
 .lineupNumber {
-  font-size: 1.5rem; /* Adjust font size for visibility */
-  margin-right: 10px; /* Space between the number and the card */
-  display: inline-block; /* Ensures proper alignment */
+  text-shadow: 2px 2px blue;
+  font-size: 8rem; /* Adjust as needed */
+  color: white; /* Ensure visibility against the background */
+  margin-right: 10px;
+  display: inline-block;
+  position: relative; /* Ensure stacking context */
+  z-index: 3; /* Ensure it is above other content */
 }
 
 .image {
@@ -50,5 +64,10 @@ p {
 }
 
 .card * {
-  flex:1;
+  flex: 1;
+}
+
+.verticalLayout {
+  display: flex;
+  flex-direction: column; /* Arrange items vertically */
 }

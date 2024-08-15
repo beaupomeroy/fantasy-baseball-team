@@ -21,14 +21,14 @@ function Header() {
 					</li>
 				</ul>
 			</nav>
-			<div className={styles.authButtons}>
+			{/* <div className={styles.authButtons}>
 				<Link to="/signin">
 					<button className={styles.button}>Sign In</button>
 				</Link>
 				<Link to="/register">
 					<button className={styles.button}>Register</button>
 				</Link>
-			</div>
+			</div> */}
 		</header>
 	);
 }

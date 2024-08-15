@@ -20,7 +20,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 
-console.log("MongoDB URI:", process.env.DB_URI);
 // MongoDB connection
 
 let usersCollection; // Add a reference to the users collection
@@ -31,7 +30,6 @@ const {
 	hitterSchema,
 	startingPitcherSchema,
 } = require("./schemas");
-console.log("PORT", process.env);
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(process.env.DB_URI, {
@@ -55,10 +53,9 @@ app.use(
 	})
 );
 function ensureAuthenticated(req, res, next) {
-	console.log("REQ ", req.session);
 	if (req.session && req.session.user) {
 		// User is authenticated
-		return next();
+		return res.redirect("/");
 	} else {
 		// User is not authenticated
 		res.status(401).json({ error: "Unauthorized" });
@@ -131,7 +128,6 @@ async function connectToDatabase() {
 connectToDatabase();
 
 app.post("/api/roster/relievers", async (req, res) => {
-	console.log("BODY", req.body);
 	const { name, position, imageUrl, id, era, saves, strikeouts } = req.body;
 
 	const newRelieverCard = {
@@ -148,7 +144,6 @@ app.post("/api/roster/relievers", async (req, res) => {
 		const insertOneRelieverResult = await relieverRoster.insertOne(
 			newRelieverCard
 		);
-		console.log("insertOneRelieverResult", insertOneRelieverResult);
 		res.status(200).json(insertOneRelieverResult);
 	} catch (err) {
 		res.status(500).send(err.message);
@@ -156,7 +151,6 @@ app.post("/api/roster/relievers", async (req, res) => {
 });
 
 app.post("/api/roster/startingPitchers", async (req, res) => {
-	console.log("BODY", req.body);
 	const { name, position, imageUrl, id, era, wins, strikeouts } = req.body;
 
 	const newStartingPitchersCard = {
